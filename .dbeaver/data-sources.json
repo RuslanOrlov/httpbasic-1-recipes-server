@@ -1,0 +1,56 @@
+{
+	"folders": {},
+	"connections": {
+		"postgres-jdbc-18c8bc6194b-7febf54bab92cbdd": {
+			"provider": "postgresql",
+			"driver": "postgres-jdbc",
+			"name": "postgres",
+			"save-password": true,
+			"navigator-show-only-entities": true,
+			"navigator-hide-folders": true,
+			"navigator-hide-virtual": true,
+			"configuration": {
+				"host": "localhost",
+				"port": "5432",
+				"database": "postgres",
+				"url": "jdbc:postgresql://localhost:5432/postgres",
+				"configurationType": "MANUAL",
+				"home": "postgresql-x64-14",
+				"type": "dev",
+				"provider-properties": {},
+				"auth-model": "native"
+			}
+		},
+		"postgres-jdbc-18c8bcefc22-ad46d52ca080a8d": {
+			"provider": "postgresql",
+			"driver": "postgres-jdbc",
+			"name": "recipes",
+			"save-password": true,
+			"configuration": {
+				"host": "localhost",
+				"port": "5432",
+				"database": "recipes",
+				"url": "jdbc:postgresql://localhost:5432/recipes",
+				"configurationType": "MANUAL",
+				"home": "postgresql-x64-14",
+				"type": "dev",
+				"provider-properties": {},
+				"auth-model": "native"
+			}
+		}
+	},
+	"connection-types": {
+		"dev": {
+			"name": "Разработка",
+			"color": "255,255,255",
+			"description": "База данных для разработки",
+			"auto-commit": true,
+			"confirm-execute": false,
+			"confirm-data-change": false,
+			"smart-commit": false,
+			"smart-commit-recover": false,
+			"auto-close-transactions": true,
+			"close-transactions-period": 1800
+		}
+	}
+}
