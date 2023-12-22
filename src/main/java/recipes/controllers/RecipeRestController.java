@@ -56,12 +56,12 @@ public class RecipeRestController {
 	}
 	
 	@GetMapping("/count")
-	public Integer countAll() {
+	public Long countAll() {
 		return recipeService.countAll();
 	}
 	
 	@GetMapping(path = "/count", params = "value")
-	public Integer countAll(@RequestParam String value) {
+	public Long countAll(@RequestParam String value) {
 		return recipeService.countAll(value);
 	}
 	

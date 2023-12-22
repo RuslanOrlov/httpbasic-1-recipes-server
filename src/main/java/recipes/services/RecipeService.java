@@ -38,11 +38,11 @@ public class RecipeService {
 		return recipeRepository.findRecipesWithPagingQuery(value, offset, limit);
 	}
 
-	public Integer countAll() {
-		return recipeRepository.countAll();
+	public Long countAll() {
+		return recipeRepository.count();
 	}
 
-	public Integer countAll(String value) {
+	public Long countAll(String value) {
 		return recipeRepository.countAllWithQuery(value);
 	}
 	

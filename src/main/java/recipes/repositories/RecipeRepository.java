@@ -25,15 +25,11 @@ public interface RecipeRepository extends JpaRepository<Recipe, Long> {
 			nativeQuery = true)
 	List<Recipe> findRecipesWithPagingQuery(String value, Integer offset, Integer limit);
 	
-	// Нужен ли этот метод ?? Проверить, использовав стандартный метод count()
-	@Query(value = "select count(*) from recipes", nativeQuery = true)
-	Integer countAll();
-	
 	@Query(value = "select count(*) from recipes "
 					+ "where cast(id as varchar) like :value "
 							+ "or name like :value "
 							+ "or description like :value ",
 			nativeQuery = true)
-	Integer countAllWithQuery(String value);
+	Long countAllWithQuery(String value);
 	
 }
