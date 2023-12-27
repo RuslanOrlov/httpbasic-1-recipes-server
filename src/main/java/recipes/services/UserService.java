@@ -7,6 +7,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import lombok.RequiredArgsConstructor;
+import recipes.dtos.AuthRequest;
 import recipes.dtos.RegisterRequest;
 import recipes.models.User;
 import recipes.repositories.UserRepository;
@@ -45,5 +46,22 @@ public class UserService {
 
 	public User getUserByEmail(String email) {
 		return userRepository.findByEmail(email).orElse(null);
+	}
+
+	public Boolean existsByUsername(String username) {
+		return userRepository.existsByUsername(username);
+	}
+
+	public Boolean existsByEmail(String email) {
+		return userRepository.existsByEmail(email);
+	}
+	
+	public Boolean isCorrectPassowrd(AuthRequest request) {
+		if (existsByUsername(request.getUsername())) {
+			String rawPassword = request.getPassword();
+			String encodedPassword = getUserByUsername(request.getUsername()).getPassword();
+			return encoder.matches(rawPassword, encodedPassword);
+		}
+		return false;
 	}
 }
