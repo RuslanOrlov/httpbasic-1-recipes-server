@@ -1,7 +1,9 @@
 package recipes.services;
 
+import java.util.Base64;
 import java.util.List;
 
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -23,10 +25,10 @@ public class UserService {
 	public ResponseEntity<?> registerUser(RegisterRequest request) {
 		if (userRepository.existsByUsername(request.getUsername())) {
 			return ResponseEntity.badRequest()
-					.body("Error: User with given username already exists in database.");
+					.body("Registration error: User with given username already exists in database.");
 		} else if (userRepository.existsByEmail(request.getEmail())) {
 			return ResponseEntity.badRequest()
-					.body("Error: User with given email already exists in database.");
+					.body("Registration error: User with given email already exists in database.");
 		}
 		User user = User.builder()
 				.username(request.getUsername())
@@ -63,5 +65,25 @@ public class UserService {
 			return encoder.matches(rawPassword, encodedPassword);
 		}
 		return false;
+	}
+
+	public ResponseEntity<?> checkUsernamePassword(AuthRequest request) {
+		if (!existsByUsername(request.getUsername())) {
+			return ResponseEntity
+					.status(HttpStatus.NOT_FOUND)
+					.body("Authentication error: Database has no user with name '" + request.getUsername() + "'.");
+		} else if (!isCorrectPassowrd(request)) {
+			return ResponseEntity
+					.status(HttpStatus.NOT_FOUND)
+					.body("Authentication error: Incorrect password specified for user '" + request.getUsername() + "'.");
+		}
+		return ResponseEntity.ok("Message: User's Username and Password are correct.");		
+	}
+
+	public String getAuthHeader(AuthRequest request) {
+		String source = request.getUsername() + ":" + request.getPassword();
+		String base64Credentials = Base64.getEncoder().encodeToString(source.getBytes());
+		String authHeader = "Basic " + base64Credentials;
+		return authHeader;
 	}
 }

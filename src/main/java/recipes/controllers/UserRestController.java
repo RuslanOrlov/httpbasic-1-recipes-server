@@ -1,7 +1,5 @@
 package recipes.controllers;
 
-import java.util.Base64;
-
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -62,11 +60,13 @@ public class UserRestController {
 		return userService.isCorrectPassowrd(request);
 	}
 	
+	@PostMapping("/checkUsernamePassword")
+	public ResponseEntity<?> checkUsernamePassword(@RequestBody AuthRequest request) {
+		return userService.checkUsernamePassword(request);
+	}
+	
 	@PostMapping("/token")
-	public String getAuthHeader(@RequestBody AuthRequest request) {
-		String source = request.getUsername() + ":" + request.getPassword();
-		String base64Credentials = Base64.getEncoder().encodeToString(source.getBytes());
-		String authHeader = "Basic " + base64Credentials;
-		return authHeader;
+	public String getAuthHeader(@RequestBody AuthRequest request) {		
+		return userService.getAuthHeader(request);
 	}
 }
