@@ -66,7 +66,7 @@ public class UserService {
 		}
 		return false;
 	}
-
+	
 	public ResponseEntity<?> checkUsernamePassword(AuthRequest request) {
 		if (!existsByUsername(request.getUsername())) {
 			return ResponseEntity
@@ -79,11 +79,20 @@ public class UserService {
 		}
 		return ResponseEntity.ok("Message: User's Username and Password are correct.");		
 	}
-
-	public String getAuthHeader(AuthRequest request) {
+	
+	public ResponseEntity<?> getAuthHeader(AuthRequest request) {
 		String source = request.getUsername() + ":" + request.getPassword();
 		String base64Credentials = Base64.getEncoder().encodeToString(source.getBytes());
 		String authHeader = "Basic " + base64Credentials;
-		return authHeader;
+		return ResponseEntity.ok(authHeader);
 	}
+	
+	public ResponseEntity<?> checkUserAndGetAuthHeader(AuthRequest request) {
+		ResponseEntity<?> checked = checkUsernamePassword(request);
+		if (!checked.getStatusCode().is2xxSuccessful()) {
+			return checked;
+		}
+		return getAuthHeader(request);
+	}
+	
 }

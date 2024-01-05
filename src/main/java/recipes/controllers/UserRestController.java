@@ -66,7 +66,12 @@ public class UserRestController {
 	}
 	
 	@PostMapping("/token")
-	public String getAuthHeader(@RequestBody AuthRequest request) {		
+	public ResponseEntity<?> getAuthHeader(@RequestBody AuthRequest request) {		
 		return userService.getAuthHeader(request);
+	}
+	
+	@PostMapping("/checkUser-getToken")
+	public ResponseEntity<?> checkUserAndGetAuthHeader(@RequestBody AuthRequest request) {
+		return userService.checkUserAndGetAuthHeader(request);
 	}
 }
