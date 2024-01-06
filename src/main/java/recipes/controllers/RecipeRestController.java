@@ -82,11 +82,12 @@ public class RecipeRestController {
 	@PutMapping("/{id}")
 	public ResponseEntity<Recipe> putRecipe(
 			@PathVariable Long id, 
-			@RequestBody Recipe recipe) {
+			@RequestBody Recipe patch) {
 		if (!recipeService.existsRecipeById(id)) {
 			return new ResponseEntity<Recipe>(HttpStatus.NOT_FOUND);
 		}
-		return ResponseEntity.ok(recipeService.putRecipe(id, recipe));
+		
+		return ResponseEntity.ok(recipeService.putRecipe(id, patch));
 	}
 	
 	@DeleteMapping("/{id}")

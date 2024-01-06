@@ -58,16 +58,18 @@ public class RecipeService {
 		return recipeRepository.save(recipe);
 	}
 	
-	public Recipe putRecipe(Long id, Recipe recipe) {
-		Recipe update = recipeRepository.findById(id).orElse(null);
-		if (update != null) {
-			update.setName(
-					recipe.getName() != null ? recipe.getName() : update.getName());
-			update.setDescription(
-					recipe.getDescription() != null ? recipe.getDescription() : update.getDescription());
-			recipeRepository.save(update);
+	public Recipe putRecipe(Long id, Recipe patch) {
+		Recipe updated = recipeRepository.findById(id).orElse(null);
+		if (updated != null) {
+			updated.setName(
+					patch.getName() != null ? patch.getName() : updated.getName()
+					);
+			updated.setDescription(
+					patch.getDescription() != null ? patch.getDescription() : updated.getDescription()
+					);
+			recipeRepository.save(updated);
 		}
-		return update;
+		return updated;
 	}
 
 	public void deleteRecipe(Long id) {
