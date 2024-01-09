@@ -8,7 +8,6 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
-import jakarta.persistence.JoinColumn;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
 import lombok.AllArgsConstructor;
@@ -33,8 +32,7 @@ public class Recipe {
 	private String description;
 	
 	@Builder.Default
-	@OneToMany(cascade = CascadeType.ALL)
-//	@JoinColumn(name = "recipe_idd")
+	@OneToMany(cascade = CascadeType.ALL, mappedBy = "recipe")
 	private List<Ingredient> ingredients = new ArrayList<>();
 	
 }
