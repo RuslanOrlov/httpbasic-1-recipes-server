@@ -16,7 +16,8 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
 import lombok.RequiredArgsConstructor;
-import recipes.models.Recipe;
+import recipes.dtos.RecipeDTO;
+import recipes.dtos.RecipeRequest;
 import recipes.services.RecipeService;
 
 @RestController
@@ -27,29 +28,29 @@ public class RecipeRestController {
 	private final RecipeService recipeService;
 	
 	@GetMapping
-	public ResponseEntity<List<Recipe>> getAllRecipes() {
+	public ResponseEntity<List<RecipeRequest>> getAllRecipes() {
 		return ResponseEntity.ok(recipeService.getAllRecipes());
 	}
 	
 	@GetMapping(params = "sort")
-	public ResponseEntity<List<Recipe>> getAllRecipes(@RequestParam String sort) {
+	public ResponseEntity<List<RecipeRequest>> getAllRecipes(@RequestParam String sort) {
 		return ResponseEntity.ok(recipeService.getAllRecipes(sort));
 	}
 	
 	@GetMapping(params = {"sort", "page", "size"})
-	public ResponseEntity<List<Recipe>> getAllRecipes(@RequestParam("sort") String sort, 
+	public ResponseEntity<List<RecipeRequest>> getAllRecipes(@RequestParam("sort") String sort, 
 									@RequestParam("page") int page, 
 									@RequestParam("size") int size) {
 		return ResponseEntity.ok(recipeService.getAllRecipes(sort, page, size));
 	}
 	
 	@GetMapping(params = "value")
-	public ResponseEntity<List<Recipe>> getAllRecipesWithQuery(@RequestParam String value) {
+	public ResponseEntity<List<RecipeRequest>> getAllRecipesWithQuery(@RequestParam String value) {
 		return ResponseEntity.ok(recipeService.getAllRecipesWithQuery(value));
 	}
 	
 	@GetMapping(params = {"value", "offset", "limit"})
-	public ResponseEntity<List<Recipe>> getAllRecipesWithQuery(@RequestParam String value, 
+	public ResponseEntity<List<RecipeRequest>> getAllRecipesWithQuery(@RequestParam String value, 
 									@RequestParam int offset, 
 									@RequestParam int limit) {
 		return ResponseEntity.ok(recipeService.getAllRecipesWithQuery(value, offset, limit));
@@ -66,39 +67,33 @@ public class RecipeRestController {
 	}
 	
 	@GetMapping("/{id}")
-	public ResponseEntity<Recipe> getRecipe(@PathVariable Long id) {
-		Recipe recipe = recipeService.getRecipe(id);
-		if (recipe == null) {
-			return new ResponseEntity<Recipe>(HttpStatus.NOT_FOUND);
+	public ResponseEntity<RecipeRequest> getRecipe(@PathVariable Long id) {
+		RecipeRequest recipeRequest = recipeService.getRecipe(id);
+		if (recipeRequest == null) {
+			return new ResponseEntity<RecipeRequest>(HttpStatus.NOT_FOUND);
 		}
-		return ResponseEntity.ok(recipe);
+		return ResponseEntity.ok(recipeRequest);
 	}
 	
 	@PostMapping
-	public ResponseEntity<Recipe> postRecipe(@RequestBody Recipe recipe) {
-		return ResponseEntity.ok(recipeService.postRecipe(recipe));
+	public ResponseEntity<RecipeRequest> postRecipe(@RequestBody RecipeRequest recipeRequest) {
+		return ResponseEntity.ok(recipeService.postRecipe(recipeRequest));
 	}
 	
 	@PutMapping("/{id}")
-	public ResponseEntity<Recipe> putRecipe(
+	public ResponseEntity<RecipeRequest> putRecipe(
 			@PathVariable Long id, 
-			@RequestBody Recipe patch) {
+			@RequestBody RecipeDTO patch) {
 		if (!recipeService.existsRecipeById(id)) {
-			return new ResponseEntity<Recipe>(HttpStatus.NOT_FOUND);
+			return new ResponseEntity<>(HttpStatus.NOT_FOUND);
 		}
 		
 		return ResponseEntity.ok(recipeService.putRecipe(id, patch));
 	}
-	
+		
 	@DeleteMapping("/{id}")
 	@ResponseStatus(code = HttpStatus.NO_CONTENT)
 	public void deleteRecipe(@PathVariable Long id) {
 		recipeService.deleteRecipe(id);
-	}
-
-	@DeleteMapping
-	@ResponseStatus(code = HttpStatus.NO_CONTENT)
-	public void deleteRecipe(@RequestBody Recipe recipe) {
-		recipeService.deleteRecipe(recipe);
 	}
 }

@@ -14,6 +14,9 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import recipes.dtos.IngredientDTO;
+import recipes.dtos.RecipeDTO;
+import recipes.dtos.RecipeRequest;
 
 @Data
 @Builder
@@ -35,4 +38,30 @@ public class Recipe {
 	@OneToMany(cascade = CascadeType.ALL, mappedBy = "recipe")
 	private List<Ingredient> ingredients = new ArrayList<>();
 	
+	public RecipeDTO getRecipeDTO() {
+		return RecipeDTO.builder()
+				.id(id)
+				.name(name)
+				.description(description)
+				.build();
+	}
+	
+	public RecipeRequest getRecipeRequest() {
+		RecipeDTO dto = getRecipeDTO();
+		
+		List<IngredientDTO> ingredientsDtos = new ArrayList<>();
+		for (Ingredient ingredient : ingredients) {
+			IngredientDTO ingredientDTO = IngredientDTO.builder()
+					.id(ingredient.getId())
+					.name(ingredient.getName())
+					.build();
+			ingredientsDtos.add(ingredientDTO);
+		}
+		
+		RecipeRequest recipeRequest = new RecipeRequest();
+		recipeRequest.setRecipe(dto);
+		recipeRequest.setIngredients(ingredientsDtos);
+		
+		return recipeRequest;
+	}
 }
