@@ -1,5 +1,6 @@
 package recipes.services;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.data.domain.PageRequest;
@@ -8,6 +9,10 @@ import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import lombok.RequiredArgsConstructor;
+import recipes.dtos.IngredientDTO;
+import recipes.dtos.RecipeDTO;
+import recipes.dtos.RecipeRequest;
+import recipes.models.Ingredient;
 import recipes.models.Recipe;
 import recipes.repositories.RecipeRepository;
 
@@ -17,25 +22,61 @@ public class RecipeService {
 	
 	private final RecipeRepository recipeRepository;
 
-	public List<Recipe> getAllRecipes() {
-		return recipeRepository.findAll();
+	public List<RecipeRequest> getAllRecipes() {
+		List<Recipe> recipes = recipeRepository.findAll();
+		List<RecipeRequest> list = new ArrayList<>();
+		
+		for (Recipe recipe : recipes) {
+			list.add(recipe.getRecipeRequest());
+		}
+		
+		return list;
 	}
 
-	public List<Recipe> getAllRecipes(String sort) {
-		return recipeRepository.findAll(Sort.by(sort));
+	public List<RecipeRequest> getAllRecipes(String sort) {
+		List<Recipe> recipes = recipeRepository.findAll(Sort.by(sort));
+		List<RecipeRequest> list = new ArrayList<>();
+		
+		for (Recipe recipe : recipes) {
+			list.add(recipe.getRecipeRequest());
+		}
+		
+		return list;
 	}
 
-	public List<Recipe> getAllRecipes(String sort, int page, int size) {
+	public List<RecipeRequest> getAllRecipes(String sort, int page, int size) {
 		Pageable pageable = PageRequest.of(page, size, Sort.by(sort));
-		return recipeRepository.findAll(pageable).getContent();
+				
+		List<Recipe> recipes = recipeRepository.findAll(pageable).getContent();
+		List<RecipeRequest> list = new ArrayList<>();
+		
+		for (Recipe recipe : recipes) {
+			list.add(recipe.getRecipeRequest());
+		}
+		
+		return list;
 	}
 
-	public List<Recipe> getAllRecipesWithQuery(String value) {
-		return recipeRepository.findRecipesWithQuery(value);
+	public List<RecipeRequest> getAllRecipesWithQuery(String value) {
+		List<Recipe> recipes = recipeRepository.findRecipesWithQuery(value);
+		List<RecipeRequest> list = new ArrayList<>();
+		
+		for (Recipe recipe : recipes) {
+			list.add(recipe.getRecipeRequest());
+		}
+		
+		return list;
 	}
 
-	public List<Recipe> getAllRecipesWithQuery(String value, int offset, int limit) {
-		return recipeRepository.findRecipesWithPagingQuery(value, offset, limit);
+	public List<RecipeRequest> getAllRecipesWithQuery(String value, int offset, int limit) {
+		List<Recipe> recipes = recipeRepository.findRecipesWithPagingQuery(value, offset, limit);
+		List<RecipeRequest> list = new ArrayList<>();
+		
+		for (Recipe recipe : recipes) {
+			list.add(recipe.getRecipeRequest());
+		}
+		
+		return list;
 	}
 
 	public Long countAll() {
@@ -46,19 +87,44 @@ public class RecipeService {
 		return recipeRepository.countAllWithQuery(value);
 	}
 	
-	public Recipe getRecipe(Long id) {
-		return recipeRepository.findById(id).orElse(null);
+	public RecipeRequest getRecipe(Long id) {
+		RecipeRequest recipeRequest = null;
+		
+		Recipe recipe = recipeRepository.findById(id).orElse(null);
+		
+		if (recipe != null) {
+			recipeRequest = recipe.getRecipeRequest();
+		}
+		return recipeRequest;
 	}
 	
 	public Boolean existsRecipeById(Long id) {
 		return recipeRepository.existsById(id);
 	}
 	
-	public Recipe postRecipe(Recipe recipe) {
-		return recipeRepository.save(recipe);
+	public RecipeRequest postRecipe(RecipeRequest recipeRequest) {
+		
+		Recipe recipe = Recipe.builder()
+				.name(recipeRequest.getRecipe().getName())
+				.description(recipeRequest.getRecipe().getDescription())
+				.build();
+		
+		List<Ingredient> ingredients = new ArrayList<>();
+		for (IngredientDTO ingredientDTO : recipeRequest.getIngredients()) {
+			Ingredient ingredient = Ingredient.builder()
+					.name(ingredientDTO.getName())
+					.recipe(recipe)
+					.build();
+			ingredients.add(ingredient);
+		}
+		recipe.setIngredients(ingredients);
+		
+		recipeRepository.save(recipe);
+		
+		return recipe.getRecipeRequest();
 	}
 	
-	public Recipe putRecipe(Long id, Recipe patch) {
+	public RecipeRequest putRecipe(Long id, RecipeDTO patch) {
 		Recipe updated = recipeRepository.findById(id).orElse(null);
 		if (updated != null) {
 			updated.setName(
@@ -67,16 +133,12 @@ public class RecipeService {
 			updated.setDescription(
 					patch.getDescription() != null ? patch.getDescription() : updated.getDescription()
 					);
-			recipeRepository.save(updated);
+			return recipeRepository.save(updated).getRecipeRequest();
 		}
-		return updated;
+		return null;
 	}
-
+		
 	public void deleteRecipe(Long id) {
 		recipeRepository.deleteById(id);		
-	}
-
-	public void deleteRecipe(Recipe recipe) {
-		recipeRepository.delete(recipe);		
 	}
 }
