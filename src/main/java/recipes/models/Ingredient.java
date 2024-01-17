@@ -11,6 +11,9 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import recipes.dtos.IngredientDTO;
+import recipes.dtos.IngredientWrapper;
+import recipes.dtos.RecipeDTO;
 
 @Data
 @Builder
@@ -29,5 +32,23 @@ public class Ingredient {
 	@ManyToOne
 	@JoinColumn(name = "recipe_id")
 	private Recipe recipe;
+	
+	public IngredientDTO getIngredientDTO() {
+		return IngredientDTO.builder()
+				.id(id)
+				.name(name)
+				.build();
+	}
+	
+	public IngredientWrapper getIngredientWrapper() {
+		RecipeDTO recipeDTO = recipe.getRecipeDTO();
+		IngredientDTO ingredientDTO = getIngredientDTO();
+		
+		IngredientWrapper ingredientWrapper = new IngredientWrapper();
+		ingredientWrapper.setRecipe(recipeDTO);
+		ingredientWrapper.setIngredient(ingredientDTO);
+		
+		return ingredientWrapper;
+	}
 	
 }

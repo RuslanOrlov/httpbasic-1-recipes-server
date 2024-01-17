@@ -17,7 +17,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import lombok.RequiredArgsConstructor;
 import recipes.dtos.RecipeDTO;
-import recipes.dtos.RecipeRequest;
+import recipes.dtos.RecipeWrapper;
 import recipes.services.RecipeService;
 
 @RestController
@@ -28,31 +28,33 @@ public class RecipeRestController {
 	private final RecipeService recipeService;
 	
 	@GetMapping
-	public ResponseEntity<List<RecipeRequest>> getAllRecipes() {
+	public ResponseEntity<List<RecipeWrapper>> getAllRecipes() {
 		return ResponseEntity.ok(recipeService.getAllRecipes());
 	}
 	
 	@GetMapping(params = "sort")
-	public ResponseEntity<List<RecipeRequest>> getAllRecipes(@RequestParam String sort) {
+	public ResponseEntity<List<RecipeWrapper>> getAllRecipes(@RequestParam String sort) {
 		return ResponseEntity.ok(recipeService.getAllRecipes(sort));
 	}
 	
 	@GetMapping(params = {"sort", "page", "size"})
-	public ResponseEntity<List<RecipeRequest>> getAllRecipes(@RequestParam("sort") String sort, 
-									@RequestParam("page") int page, 
-									@RequestParam("size") int size) {
+	public ResponseEntity<List<RecipeWrapper>> getAllRecipes(
+						@RequestParam/*("sort")*/ String sort, 
+						@RequestParam/*("page")*/ int page, 
+						@RequestParam/*("size")*/ int size) {
 		return ResponseEntity.ok(recipeService.getAllRecipes(sort, page, size));
 	}
 	
 	@GetMapping(params = "value")
-	public ResponseEntity<List<RecipeRequest>> getAllRecipesWithQuery(@RequestParam String value) {
+	public ResponseEntity<List<RecipeWrapper>> getAllRecipesWithQuery(@RequestParam String value) {
 		return ResponseEntity.ok(recipeService.getAllRecipesWithQuery(value));
 	}
 	
 	@GetMapping(params = {"value", "offset", "limit"})
-	public ResponseEntity<List<RecipeRequest>> getAllRecipesWithQuery(@RequestParam String value, 
-									@RequestParam int offset, 
-									@RequestParam int limit) {
+	public ResponseEntity<List<RecipeWrapper>> getAllRecipesWithQuery(
+						@RequestParam String value, 
+						@RequestParam int offset, 
+						@RequestParam int limit) {
 		return ResponseEntity.ok(recipeService.getAllRecipesWithQuery(value, offset, limit));
 	}
 	
@@ -67,21 +69,21 @@ public class RecipeRestController {
 	}
 	
 	@GetMapping("/{id}")
-	public ResponseEntity<RecipeRequest> getRecipe(@PathVariable Long id) {
-		RecipeRequest recipeRequest = recipeService.getRecipe(id);
+	public ResponseEntity<RecipeWrapper> getRecipe(@PathVariable Long id) {
+		RecipeWrapper recipeRequest = recipeService.getRecipe(id);
 		if (recipeRequest == null) {
-			return new ResponseEntity<RecipeRequest>(HttpStatus.NOT_FOUND);
+			return new ResponseEntity<RecipeWrapper>(HttpStatus.NOT_FOUND);
 		}
 		return ResponseEntity.ok(recipeRequest);
 	}
 	
 	@PostMapping
-	public ResponseEntity<RecipeRequest> postRecipe(@RequestBody RecipeRequest recipeRequest) {
-		return ResponseEntity.ok(recipeService.postRecipe(recipeRequest));
+	public ResponseEntity<RecipeWrapper> postRecipe(@RequestBody RecipeWrapper recipeWrapper) {
+		return ResponseEntity.ok(recipeService.postRecipe(recipeWrapper));
 	}
 	
 	@PutMapping("/{id}")
-	public ResponseEntity<RecipeRequest> putRecipe(
+	public ResponseEntity<RecipeWrapper> putRecipe(
 			@PathVariable Long id, 
 			@RequestBody RecipeDTO patch) {
 		if (!recipeService.existsRecipeById(id)) {

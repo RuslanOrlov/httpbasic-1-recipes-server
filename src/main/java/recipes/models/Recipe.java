@@ -16,7 +16,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import recipes.dtos.IngredientDTO;
 import recipes.dtos.RecipeDTO;
-import recipes.dtos.RecipeRequest;
+import recipes.dtos.RecipeWrapper;
 
 @Data
 @Builder
@@ -46,7 +46,7 @@ public class Recipe {
 				.build();
 	}
 	
-	public RecipeRequest getRecipeRequest() {
+	public RecipeWrapper getRecipeWrapper() {
 		RecipeDTO dto = getRecipeDTO();
 		
 		List<IngredientDTO> ingredientsDtos = new ArrayList<>();
@@ -58,10 +58,10 @@ public class Recipe {
 			ingredientsDtos.add(ingredientDTO);
 		}
 		
-		RecipeRequest recipeRequest = new RecipeRequest();
-		recipeRequest.setRecipe(dto);
-		recipeRequest.setIngredients(ingredientsDtos);
+		RecipeWrapper recipeWrapper = new RecipeWrapper();
+		recipeWrapper.setRecipe(dto);
+		recipeWrapper.setIngredients(ingredientsDtos);
 		
-		return recipeRequest;
+		return recipeWrapper;
 	}
 }
