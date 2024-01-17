@@ -1,7 +1,5 @@
 package recipes.services;
 
-import java.util.List;
-
 import org.springframework.stereotype.Service;
 
 import lombok.RequiredArgsConstructor;
@@ -90,8 +88,6 @@ public class IngredientService {
 	
 	public void deleteIngredientsOfRecipe(RecipeDTO recipeDTO) {
 		Recipe recipe = recipeRepository.findById(recipeDTO.getId()).orElse(null);
-		List<Ingredient> list = ingredientRepository.getAllByRecipe(recipe);
-		for (Ingredient ingredient : list)
-			ingredientRepository.delete(ingredient);
+		ingredientRepository.deleteAll(ingredientRepository.getAllByRecipe(recipe));
 	}	
 }
