@@ -14,11 +14,13 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
 import lombok.RequiredArgsConstructor;
+//import lombok.extern.slf4j.Slf4j;
 import recipes.dtos.IngredientWrapper;
 import recipes.dtos.RecipeDTO;
 import recipes.dtos.RecipeWrapper;
 import recipes.services.IngredientService;
 
+//@Slf4j
 @RestController
 @RequestMapping(path = "/api/v1/ingredients", produces = "application/json")
 @RequiredArgsConstructor
