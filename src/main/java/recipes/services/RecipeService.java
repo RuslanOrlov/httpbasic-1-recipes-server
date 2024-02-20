@@ -78,7 +78,7 @@ public class RecipeService {
 		
 		return list;
 	}
-
+	
 	public Long countAll() {
 		return recipeRepository.count();
 	}

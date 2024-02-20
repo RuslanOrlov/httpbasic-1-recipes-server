@@ -38,6 +38,56 @@ public class IngredientRestController {
 		return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
 	}
 	
+	@GetMapping(params = {"recipeId", "sort", "page", "size"})
+	public ResponseEntity<RecipeWrapper> getAllIngredientsOfOneRecipe(
+			@RequestParam Long recipeId,
+			@RequestParam String sort,
+			@RequestParam int page,
+			@RequestParam int size) {
+		RecipeWrapper wrapper = ingredientService.getAllIngredientsOfOneRecipe(
+													recipeId, sort, page, size);
+		
+		if (wrapper != null) { return ResponseEntity.ok(wrapper); }
+		
+		return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
+	}
+	
+	@GetMapping(params = {"recipeId", "value"})
+	public ResponseEntity<RecipeWrapper> getAllIngredientsOfOneRecipe(
+			@RequestParam Long recipeId,
+			@RequestParam String value) {
+		RecipeWrapper wrapper = ingredientService.getAllIngredientsOfOneRecipe(
+													recipeId, value);
+		
+		if (wrapper != null) { return ResponseEntity.ok(wrapper); }
+		
+		return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
+	}
+
+	@GetMapping(params = {"recipeId", "offset", "limit", "value"})
+	public ResponseEntity<RecipeWrapper> getAllIngredientsOfOneRecipe(
+			@RequestParam Long recipeId, 
+			@RequestParam int offset, 
+			@RequestParam int limit, 
+			@RequestParam String value) {
+		RecipeWrapper wrapper = ingredientService.getAllIngredientsOfOneRecipe(
+													recipeId, offset, limit, value);
+		
+		if (wrapper != null) { return ResponseEntity.ok(wrapper); }
+		
+		return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
+	}
+	
+	@GetMapping(path = "/count", params = "recipeId")
+	public Long countAll(@RequestParam Long recipeId) {
+		return ingredientService.countAll(recipeId);
+	}
+	
+	@GetMapping(path = "/count", params = {"recipeId", "value"})
+	public Long countAll(@RequestParam Long recipeId, @RequestParam String value) {
+		return ingredientService.countAll(recipeId, value);
+	}
+	
 	@GetMapping(params = {"recipeId", "ingredientId"})
 	public ResponseEntity<IngredientWrapper> getOneIngredientOfOneRecipe(
 						@RequestParam Long recipeId,
