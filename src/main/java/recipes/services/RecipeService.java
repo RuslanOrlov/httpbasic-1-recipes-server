@@ -98,6 +98,18 @@ public class RecipeService {
 		return recipeRequest;
 	}
 	
+	// Поддержка изображений
+	public byte[] getRecipeImage(Long id) {
+		byte[] image = null;
+		
+		Recipe recipe = recipeRepository.findById(id).orElse(null);
+		
+		if (recipe != null) {
+			image = recipe.getImage();
+		}
+		return image;
+	}
+	
 	public Boolean existsRecipeById(Long id) {
 		return recipeRepository.existsById(id);
 	}
@@ -107,6 +119,10 @@ public class RecipeService {
 		Recipe recipe = Recipe.builder()
 				.name(recipeWrapper.getRecipe().getName())
 				.description(recipeWrapper.getRecipe().getDescription())
+				
+				// Поддержка изображений
+				.image(recipeWrapper.getRecipe().getImage())
+				
 				.build();
 		
 		List<Ingredient> ingredients = new ArrayList<>();
@@ -137,6 +153,12 @@ public class RecipeService {
 					patch.getDescription().trim().length() > 0 ? 
 							patch.getDescription() : updated.getDescription()
 					);
+			
+			// Поддержка изображений
+			updated.setImage(
+					patch.getImage() != null ? patch.getImage() : updated.getImage()
+					);
+			
 			return recipeRepository.save(updated).getRecipeWrapper();
 		}
 		return null;
@@ -145,4 +167,5 @@ public class RecipeService {
 	public void deleteRecipe(Long id) {
 		recipeRepository.deleteById(id);		
 	}
+	
 }

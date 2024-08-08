@@ -2,7 +2,9 @@ package recipes.controllers;
 
 import java.util.List;
 
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -77,6 +79,15 @@ public class RecipeRestController {
 			return new ResponseEntity<RecipeWrapper>(HttpStatus.NOT_FOUND);
 		}
 		return ResponseEntity.ok(recipeRequest);
+	}
+	
+	// Поддержка изображений
+	@GetMapping("/{id}/image")
+	public ResponseEntity<byte[]> getRecipeImage(@PathVariable Long id) {
+	    byte[] image = recipeService.getRecipeImage(id);
+	    HttpHeaders headers = new HttpHeaders();
+	    headers.setContentType(MediaType.IMAGE_JPEG);
+	    return new ResponseEntity<>(image, headers, HttpStatus.OK);
 	}
 	
 	@PostMapping

@@ -8,6 +8,7 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.Lob;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
 import lombok.AllArgsConstructor;
@@ -34,6 +35,10 @@ public class Recipe {
 	
 	private String description;
 	
+	// Поддержка изображений
+	@Lob
+	private byte[] image;
+	
 	@Builder.Default
 	@OneToMany(cascade = CascadeType.ALL, mappedBy = "recipe")
 	private List<Ingredient> ingredients = new ArrayList<>();
@@ -43,6 +48,11 @@ public class Recipe {
 				.id(id)
 				.name(name)
 				.description(description)
+				
+				// Поддержка изображений
+				.image(image)
+				.imageUrl("http://localhost:8080/api/v1/recipes/" + id + "/image")
+				
 				.build();
 	}
 	
