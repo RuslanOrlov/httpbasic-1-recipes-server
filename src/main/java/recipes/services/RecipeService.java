@@ -119,10 +119,7 @@ public class RecipeService {
 		Recipe recipe = Recipe.builder()
 				.name(recipeWrapper.getRecipe().getName())
 				.description(recipeWrapper.getRecipe().getDescription())
-				
-				// Поддержка изображений
-				.image(recipeWrapper.getRecipe().getImage())
-				
+				.image(recipeWrapper.getRecipe().getImage())	/* Поддержка изображений */
 				.build();
 		
 		List<Ingredient> ingredients = new ArrayList<>();
@@ -153,9 +150,7 @@ public class RecipeService {
 					patch.getDescription().trim().length() > 0 ? 
 							patch.getDescription() : updated.getDescription()
 					);
-			
-			// Поддержка изображений
-			updated.setImage(
+			updated.setImage(		/* Поддержка изображений */
 					patch.getImage() != null ? patch.getImage() : updated.getImage()
 					);
 			

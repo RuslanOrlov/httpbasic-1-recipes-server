@@ -35,9 +35,8 @@ public class Recipe {
 	
 	private String description;
 	
-	// Поддержка изображений
 	@Lob
-	private byte[] image;
+	private byte[] image; /* Поддержка изображений */
 	
 	@Builder.Default
 	@OneToMany(cascade = CascadeType.ALL, mappedBy = "recipe")
@@ -48,11 +47,9 @@ public class Recipe {
 				.id(id)
 				.name(name)
 				.description(description)
-				
-				// Поддержка изображений
-				.image(image)
-				.imageUrl("http://localhost:8080/api/v1/recipes/" + id + "/image")
-				
+				.image(image) 										/* Поддержка изображений */
+				.imageUrl("http://localhost:8080/api/v1/recipes/" 	/* Поддержка изображений */
+							+ id + "/image")
 				.build();
 	}
 	
