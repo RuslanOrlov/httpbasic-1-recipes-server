@@ -47,7 +47,7 @@ public class Recipe {
 				.id(id)
 				.name(name)
 				.description(description)
-				.image(image) 										/* Поддержка изображений */
+				.image(null) 										/* Поддержка изображений */
 				.imageUrl("http://localhost:8080/api/v1/recipes/" 	/* Поддержка изображений */
 							+ id + "/image")
 				.build();
