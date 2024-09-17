@@ -3,8 +3,10 @@ package recipes.models;
 import java.util.ArrayList;
 import java.util.List;
 
+import jakarta.persistence.Basic;
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Entity;
+import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
@@ -36,7 +38,8 @@ public class Recipe {
 	private String description;
 	
 	@Lob
-	private byte[] image; /* Поддержка изображений */
+	@Basic(fetch = FetchType.LAZY)		/* Предотвращает загрузку изображения */
+	private byte[] image; 				/* Поддержка изображений */
 	
 	@Builder.Default
 	@OneToMany(cascade = CascadeType.ALL, mappedBy = "recipe")
