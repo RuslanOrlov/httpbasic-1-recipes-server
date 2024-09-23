@@ -163,4 +163,14 @@ public class RecipeService {
 		recipeRepository.deleteById(id);		
 	}
 	
+	// Поддержка изображений
+	public void deleteRecipeImage(Long id) {
+		Recipe recipe = recipeRepository.findById(id).orElse(null);
+		
+		if (recipe != null) {
+			recipe.setImage(new byte[0]);
+			recipeRepository.save(recipe);
+		}
+	}
+	
 }

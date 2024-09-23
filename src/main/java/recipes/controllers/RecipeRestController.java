@@ -90,6 +90,12 @@ public class RecipeRestController {
 	    return new ResponseEntity<>(image, headers, HttpStatus.OK);
 	}
 	
+	// Поддержка изображений
+	@DeleteMapping("/{id}/image")
+	public void deleteRecipeImage(@PathVariable Long id) {
+		recipeService.deleteRecipeImage(id);
+	}
+	
 	@PostMapping
 	public ResponseEntity<RecipeWrapper> postRecipe(@RequestBody RecipeWrapper recipeWrapper) {
 		return ResponseEntity.ok(recipeService.postRecipe(recipeWrapper));
